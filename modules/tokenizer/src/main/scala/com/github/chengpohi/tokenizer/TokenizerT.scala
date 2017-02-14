@@ -1,14 +1,7 @@
 package com.github.chengpohi.tokenizer
 
-import java.io.{File, StringReader}
+import java.io.File
 
-import com.github.chengpohi.elasticsearch.plugin.index.MTTokenizer
-import org.apache.lucene.analysis.core.WhitespaceTokenizer
-import org.apache.lucene.analysis.custom.CustomAnalyzer
-import org.apache.lucene.analysis.standard.StandardTokenizer
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
-
-import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
 /**
