@@ -9,7 +9,7 @@ import org.scalatest._
 /**
   * Created by chengpohi on 13/02/2017.
   */
-abstract class MTTest extends FlatSpec with Matchers
+trait MTTest extends FlatSpec with Matchers with BeforeAndAfter
 
 class MTEnAnalyzerTest extends MTTest {
   it should "generate tokens" in {
