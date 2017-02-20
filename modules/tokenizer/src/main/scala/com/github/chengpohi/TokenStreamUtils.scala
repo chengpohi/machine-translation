@@ -13,9 +13,18 @@ import scala.collection.mutable.ArrayBuffer
 object TokenStreamUtils {
 
   implicit class TokenStringHelper(s: String) {
-    def map(tokenizer: Tokenizer): List[String] = {
+    def map[T <: Tokenizer](tokenizer: T): List[String] = {
       tokenizer.setReader(new StringReader(s))
       tokenizer.toList
+    }
+
+    def tokenize[T <: Tokenizer](tokenizer: T): T = {
+      tokenizer.setReader(new StringReader(s))
+      tokenizer
+    }
+
+    def analyze[T <: Analyzer](analyzer: T): TokenStream = {
+      analyzer.tokenStream("", new StringReader(s))
     }
 
     def map(analyzer: Analyzer): List[String] = {
