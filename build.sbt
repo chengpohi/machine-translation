@@ -13,11 +13,11 @@ compileScalaStyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).
 (scalastyleConfig in Compile) := file("project/scalastyle-config.xml")
 (scalastyleConfig in Test) := file("project/scalastyle-test-config.xml")
 
-lazy val tokenizer = project.in(file("modules/tokenizer"))
+lazy val analyzer = project.in(file("modules/analyzer"))
   .settings(commonSettings: _*)
   .settings(libraryDependencies ++= commonDependencies)
 
 lazy val app = project.in(file("app"))
   .settings(commonSettings: _*)
   .settings(libraryDependencies ++= commonDependencies)
-  .dependsOn(tokenizer)
+  .dependsOn(analyzer)
