@@ -21,7 +21,7 @@ object Settings {
     "org.apache.logging.log4j" % "log4j-api" % "2.7",
     "org.apache.logging.log4j" % "log4j-core" % "2.7",
     "com.typesafe" % "config" % "1.3.0",
-
+    "org.scalaz" %% "scalaz-core" % "7.2.10",
     "com.github.chengpohi" %% "elasticdsl" % "0.2.3-SNAPSHOT"
   )
 

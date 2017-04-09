@@ -18,6 +18,12 @@ class MTEnAnalyzerTest extends MTTest {
     val analyzer: TokenStream = str.analyze(new MTEnAnalyzer)
     assertTokenStreamContents(analyzer, Array[String]("it's", "a", "1", "c++", "c#", "java"))
 
-    str.map(new MTEnAnalyzer).foreach(println)
+    //str.map(new MTEnAnalyzer).foreach(println)
+  }
+
+  it should "generate" in {
+    val str = "Why is it faster to process a sorted array than an unsorted array?"
+    val tokenizer: MTEnTokenizer = str.tokenize(new MTEnTokenizer)
+    tokenizer.toList.foreach(println)
   }
 }

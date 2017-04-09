@@ -2,6 +2,8 @@ package com.github.chengpohi.utils
 
 import java.io.StringReader
 
+import com.github.chengpohi.algorithm.Sentence
+import com.github.chengpohi.analyzer.en.NgramCorpus
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 import org.apache.lucene.analysis.{Analyzer, TokenStream, Tokenizer}
 
@@ -30,6 +32,8 @@ object TokenStreamUtils {
     def map(analyzer: Analyzer): List[String] = {
       analyzer.tokenStream("", new StringReader(s)).toList
     }
+
+    def reorder(implicit corpus: NgramCorpus): String = Sentence(s, corpus)
   }
 
   implicit class TokenStreamHelper(s: TokenStream) {
