@@ -4,18 +4,21 @@ import com.github.chengpohi.analyzer.en.NgramCorpus
 
 
 case class TF(count: Int, freq: Double)
-case class GramTerm(left: String, right: String, tf: TF)
+
+case class GramTerm(left: String, right: String, tf: TF = TF(0, 0d)) {
+  override def toString: String = s"""($left,$right)"""
+}
 
 class Sentence(ngramCorpus: NgramCorpus) {
   def reorder(sentence: String): String = {
     val tokenizer = sentence.split("\\s+")
 
     val combinations = tokenizer.combinations(2).flatMap(i =>
-      List((i(0), i(1)), (i(1), i(0)))
+      List(GramTerm(i(0), i(1)), GramTerm(i(1), i(0)))
     ).toList
 
     val r = combinations.map(i =>
-      GramTerm(i._1, i._2, ngramCorpus.terms(i))
+      i.copy(tf = ngramCorpus.terms(i))
     ).filter(_.tf.freq > 0)
     val t = r.groupBy(_.left).map(i => i._2.sortBy(_.tf.freq).last).toList
     concatSentence(t, tokenizer.size)

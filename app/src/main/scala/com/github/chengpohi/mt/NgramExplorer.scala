@@ -1,19 +1,24 @@
 package com.github.chengpohi.mt
 
+import com.github.chengpohi.algorithm.GramTerm
 import com.github.chengpohi.analyzer.en.NgramCorpus
 
 import scala.io.Source
 
 object NgramExplorer extends App {
+
   import com.github.chengpohi.utils.TokenStreamUtils._
+
   val data = Source.fromResource("training/corpus.txt")
     .getLines()
     .toStream
   implicit val corpus = NgramCorpus(data)
 
-  val test1 = ("I", "have")
-  val test2 = ("have", "I")
+  val test1 = GramTerm("I", "have")
+  //P("have" | "I") * P("e")
   val terms1 = corpus.terms(test1)
+  val test2 = GramTerm("have", "I")
+  //P("I" | "have") * P("e")
   val terms2 = corpus.terms(test2)
   println("total size: " + corpus.size)
   println(s"${test1} size: " + terms1.freq)

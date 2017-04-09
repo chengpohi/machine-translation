@@ -1,11 +1,13 @@
 package com.github.chengpohi.analyzer.en
 
-import com.github.chengpohi.algorithm.TF
+import com.github.chengpohi.algorithm.{GramTerm, TF}
 
-class NgramCorpus(grams: Stream[(String, String)]) {
-  def terms(s: (String, String)): TF = {
+case class NgramCorpus(terms: List[String], grams: Stream[GramTerm]) {
+  //P(f | e)
+  def terms(s: GramTerm): TF = {
     val count = grams.count(c => c == s)
-    TF(count, count.toDouble / grams.size)
+    //P(f | e) = number-of-occurrences(ey) / number-of-occurrences(y)
+    TF(count, count.toDouble / terms.count(c => c == s.right))
   }
 
   def size: Int = grams.size
@@ -13,6 +15,9 @@ class NgramCorpus(grams: Stream[(String, String)]) {
 
 object NgramCorpus {
   def apply(s: Stream[String]): NgramCorpus = {
-    new NgramCorpus(s.flatMap(i => MTEnNgramWordTokenizer(i)))
+    s.map(i => MTEnNgramWordTokenizer(i))
+      .foldLeft(NgramCorpus(List(), Stream.empty))((a, b) => {
+        NgramCorpus(a.terms ++ b.terms, a.grams ++ b.grams)
+      })
   }
 }
