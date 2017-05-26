@@ -1,4 +1,6 @@
-name := "machine-translation"
+name := "nlp-tools"
+
+scalaVersion := "2.12.2"
 
 import Settings._
 
