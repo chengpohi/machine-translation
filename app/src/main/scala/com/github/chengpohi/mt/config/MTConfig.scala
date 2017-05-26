@@ -13,8 +13,12 @@ object MTConfig {
   private val MT_CONFIG = ConfigFactory.load("mt.conf").getConfig("mt")
   val TRAIN_DATA: Map[String, File] = {
     val trainData = MT_CONFIG.getConfig("train_data")
-    trainData.root().asScala.map(t => {
-      (t._1, new File(trainData.getString(t._1)))
-    }).toMap
+    trainData
+      .root()
+      .asScala
+      .map(t => {
+        (t._1, new File(trainData.getString(t._1)))
+      })
+      .toMap
   }
 }

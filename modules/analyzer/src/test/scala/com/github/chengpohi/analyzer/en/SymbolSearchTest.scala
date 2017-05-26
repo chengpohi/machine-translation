@@ -5,7 +5,12 @@ import java.nio.file.Paths
 import com.github.chengpohi.analyzer.MTTest
 import org.apache.lucene.document._
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
-import org.apache.lucene.index.{DirectoryReader, IndexWriter, IndexWriterConfig, Term}
+import org.apache.lucene.index.{
+  DirectoryReader,
+  IndexWriter,
+  IndexWriterConfig,
+  Term
+}
 import org.apache.lucene.search.{IndexSearcher, TermQuery}
 import org.apache.lucene.store.FSDirectory
 

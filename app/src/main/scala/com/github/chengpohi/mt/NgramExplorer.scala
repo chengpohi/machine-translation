@@ -9,7 +9,8 @@ object NgramExplorer extends App {
 
   import com.github.chengpohi.utils.TokenStreamUtils._
 
-  val data = Source.fromResource("training/corpus.txt")
+  val data = Source
+    .fromResource("training/corpus.txt")
     .getLines()
     .toStream
   implicit val corpus = NgramCorpus(data)

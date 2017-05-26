@@ -5,14 +5,18 @@ import java.io.StringReader
 import com.github.chengpohi.algorithm.Sentence
 import com.github.chengpohi.analyzer.en.{MTEnTokenizer, NgramCorpus}
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
-import org.apache.lucene.analysis.{Analyzer, LowerCaseFilter, TokenStream, Tokenizer}
+import org.apache.lucene.analysis.{
+  Analyzer,
+  LowerCaseFilter,
+  TokenStream,
+  Tokenizer
+}
 
 import scala.collection.mutable.ArrayBuffer
 import java.io.Reader
 
 import scalaz._
 import Scalaz._
-
 
 /**
   * Created by chengpohi on 20/02/2017.
@@ -43,7 +47,8 @@ object TokenStreamUtils {
     def toList: List[String] = {
       var ar = new ArrayBuffer[String]()
       s.reset()
-      val termAtt: CharTermAttribute = s.getAttribute(classOf[CharTermAttribute])
+      val termAtt: CharTermAttribute =
+        s.getAttribute(classOf[CharTermAttribute])
       while (s.incrementToken()) {
         ar.append(termAtt.toString)
       }
@@ -68,9 +73,7 @@ object TokenStreamUtils {
     }
   )
   val lowerCaseFilter = kleisli[Option, TokenStream, TokenStream](
-    (tokenStream: TokenStream) =>
-      some(new LowerCaseFilter(tokenStream))
+    (tokenStream: TokenStream) => some(new LowerCaseFilter(tokenStream))
   )
-
 
 }

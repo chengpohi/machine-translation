@@ -9,6 +9,7 @@ class MTEnTokenizer extends CharTokenizer {
   val SYMBOL = Array('+', '#', '\'')
 
   override def isTokenChar(c: Int): Boolean = {
-    !Character.isWhitespace(c) && Character.isLetterOrDigit(c) || SYMBOL.contains(c)
+    !Character.isWhitespace(c) && Character.isLetterOrDigit(c) || SYMBOL
+      .contains(c)
   }
 }
