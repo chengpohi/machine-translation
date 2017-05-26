@@ -5,9 +5,8 @@ object Settings {
 
   lazy val commonSettings = Seq(
     organization := "com.github.chengpohi",
-    unmanagedBase := baseDirectory.value / "lib",
     version := "0.0.1-SNAPSHOT",
-    scalaVersion := "2.12.1",
+    scalaVersion := "2.12.2",
     resolvers += Resolver.mavenLocal,
     ivyScala := ivyScala.value map {
       _.copy(overrideScalaVersion = true)
@@ -21,7 +20,7 @@ object Settings {
     "org.apache.logging.log4j" % "log4j-api" % "2.7",
     "org.apache.logging.log4j" % "log4j-core" % "2.7",
     "com.typesafe" % "config" % "1.3.0",
-    "org.scalaz" %% "scalaz-core" % "7.2.10",
+    "org.scalaz" %% "scalaz-core" % "latest.release",
     "com.github.chengpohi" %% "elasticdsl" % "0.2.3-SNAPSHOT"
   )
 

@@ -3,16 +3,23 @@ package com.github.chengpohi.utils
 import java.io.StringReader
 
 import com.github.chengpohi.algorithm.Sentence
-import com.github.chengpohi.analyzer.en.NgramCorpus
+import com.github.chengpohi.analyzer.en.{MTEnTokenizer, NgramCorpus}
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
-import org.apache.lucene.analysis.{Analyzer, TokenStream, Tokenizer}
+import org.apache.lucene.analysis.{Analyzer, LowerCaseFilter, TokenStream, Tokenizer}
 
 import scala.collection.mutable.ArrayBuffer
+import java.io.Reader
+
+import scalaz._
+import Scalaz._
+
 
 /**
   * Created by chengpohi on 20/02/2017.
   */
 object TokenStreamUtils {
+
+  implicit def strToStringReader(s: String): StringReader = new StringReader(s)
 
   implicit class TokenStringHelper(s: String) {
     def map[T <: Tokenizer](tokenizer: T): List[String] = {
@@ -20,17 +27,13 @@ object TokenStreamUtils {
       tokenizer.toList
     }
 
-    def tokenize[T <: Tokenizer](tokenizer: T): T = {
+    def tokenize()(implicit tokenizer: Tokenizer): TokenStream = {
       tokenizer.setReader(new StringReader(s))
       tokenizer
     }
 
-    def analyze[T <: Analyzer](analyzer: T): TokenStream = {
+    def analyze()(implicit analyzer: Analyzer): TokenStream = {
       analyzer.tokenStream("", new StringReader(s))
-    }
-
-    def map(analyzer: Analyzer): List[String] = {
-      analyzer.tokenStream("", new StringReader(s)).toList
     }
 
     def reorder(implicit corpus: NgramCorpus): String = Sentence(s, corpus)
@@ -53,5 +56,21 @@ object TokenStreamUtils {
       s.toList.zipWithIndex.map(i => (i._2, i._1)).foreach(println)
     }
   }
+
+  import Kleisli._
+  import std.option._
+
+  val mtEnTokenizer = kleisli[Option, Reader, TokenStream](
+    (reader: Reader) => {
+      val t = new MTEnTokenizer
+      t.setReader(reader)
+      some(t)
+    }
+  )
+  val lowerCaseFilter = kleisli[Option, TokenStream, TokenStream](
+    (tokenStream: TokenStream) =>
+      some(new LowerCaseFilter(tokenStream))
+  )
+
 
 }
