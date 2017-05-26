@@ -6,10 +6,10 @@ import com.github.chengpohi.algorithm.Sentence
 import com.github.chengpohi.analyzer.en.{MTEnTokenizer, NgramCorpus}
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 import org.apache.lucene.analysis.{
-  Analyzer,
-  LowerCaseFilter,
-  TokenStream,
-  Tokenizer
+Analyzer,
+LowerCaseFilter,
+TokenStream,
+Tokenizer
 }
 
 import scala.collection.mutable.ArrayBuffer
@@ -57,18 +57,18 @@ object TokenStreamUtils {
       ar.toList
     }
 
-    def print: Unit = {
-      s.toList.zipWithIndex.map(i => (i._2, i._1)).foreach(println)
+    def println: Unit = {
+      s.toList.foreach(Console.println)
     }
   }
 
   import Kleisli._
   import std.option._
 
-  val mtEnTokenizer = kleisli[Option, Reader, TokenStream](
-    (reader: Reader) => {
+  val mtEnTokenizer = kleisli[Option, String, TokenStream](
+    (s: String) => {
       val t = new MTEnTokenizer
-      t.setReader(reader)
+      t.setReader(new StringReader(s))
       some(t)
     }
   )

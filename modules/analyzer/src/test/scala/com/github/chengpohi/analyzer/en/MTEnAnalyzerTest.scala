@@ -5,6 +5,10 @@ import com.github.chengpohi.utils.TokenStreamUtils._
 import org.apache.lucene.analysis.BaseTokenStreamTestCase._
 import org.apache.lucene.analysis.TokenStream
 
+import scalaz.Scalaz._
+import scalaz._
+import scalaz.effect.IO
+
 /**
   * Created by chengpohi on 13/02/2017.
   */
@@ -28,12 +32,23 @@ class MTEnAnalyzerTest extends MTTest {
   }
 
   it should "generate" in {
-    import scalaz._
-    import Scalaz._
     val str =
       "Why is it faster to process a sorted array than an unsorted array?"
-    val result = (mtEnTokenizer >=> lowerCaseFilter) =<< some(str)
+    val result = some(str) >>= (mtEnTokenizer >=> lowerCaseFilter)
 
-    result.map(_.toList.foreach(println))
+    result.foreach(_.println)
+  }
+
+
+  it should "generate tokens from file" in {
+    val result = IO {
+      val source = scala.io.Source.fromInputStream(this.getClass.getResourceAsStream("/input.txt"))
+      source.getLines().toStream
+    }.map(_.map(l => {
+      some(l) >>= (mtEnTokenizer >=> lowerCaseFilter)
+    }))
+    result.unsafePerformIO().foreach {
+      case Some(t) => t.println
+    }
   }
 }

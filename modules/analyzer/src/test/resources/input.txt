@@ -1,0 +1,6 @@
+I hope it's not a "suicide note", but I can see your point.
+You hit on what is at the same time both a strength and a problem of Scala: its extensibility.
+This lets us implement most major functionality in libraries.
+In some other languages, sequences with something like map or collect would be built in, and nobody has to see all the hoops the compiler has to go through to make them work smoothly.
+In Scala, it's all in a library, and therefore out in the open.
+In fact the functionality of map that's supported by its complicated type is pretty advanced.
