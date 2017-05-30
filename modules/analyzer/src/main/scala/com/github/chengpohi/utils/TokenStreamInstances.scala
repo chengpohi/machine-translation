@@ -21,10 +21,7 @@ import Scalaz._
 /**
   * Created by chengpohi on 20/02/2017.
   */
-object TokenStreamUtils {
-
-  implicit def strToStringReader(s: String): StringReader = new StringReader(s)
-
+object TokenStreamInstances {
   implicit class TokenStringHelper(s: String) {
     def map[T <: Tokenizer](tokenizer: T): List[String] = {
       tokenizer.setReader(new StringReader(s))
@@ -43,7 +40,7 @@ object TokenStreamUtils {
     def reorder(implicit corpus: NgramCorpus): String = Sentence(s, corpus)
   }
 
-  implicit class TokenStreamHelper(s: TokenStream) {
+  implicit class tokenStreamInstance(s: TokenStream) {
     def toList: List[String] = {
       var ar = new ArrayBuffer[String]()
       s.reset()
@@ -55,10 +52,6 @@ object TokenStreamUtils {
       s.end()
       s.close()
       ar.toList
-    }
-
-    def println: Unit = {
-      s.toList.foreach(Console.println)
     }
   }
 
@@ -76,4 +69,7 @@ object TokenStreamUtils {
     (tokenStream: TokenStream) => some(new LowerCaseFilter(tokenStream))
   )
 
+  implicit object tokenStreamInstance extends Show[TokenStream] {
+    override def shows(t: TokenStream): String = t.toList.mkString(System.lineSeparator())
+  }
 }

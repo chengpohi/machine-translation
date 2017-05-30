@@ -7,7 +7,7 @@ import scala.io.Source
 
 object NgramExplorer extends App {
 
-  import com.github.chengpohi.utils.TokenStreamUtils._
+  import com.github.chengpohi.utils.TokenStreamInstances._
 
   val data = Source
     .fromResource("training/corpus.txt")

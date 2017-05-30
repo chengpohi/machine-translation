@@ -1,12 +1,11 @@
 package com.github.chengpohi.analyzer.en
 
 import com.github.chengpohi.analyzer.MTTest
-import com.github.chengpohi.utils.TokenStreamUtils._
+import com.github.chengpohi.utils.TokenStreamInstances._
 import org.apache.lucene.analysis.BaseTokenStreamTestCase._
 import org.apache.lucene.analysis.TokenStream
 
 import scalaz.Scalaz._
-import scalaz._
 import scalaz.effect.IO
 
 /**
