@@ -13,6 +13,10 @@ object Settings {
     }
   )
 
+  lazy val appDependencies = Seq(
+    "jline" % "jline" % "3.0.0.M1"
+  )
+
   lazy val commonDependencies = Seq(
     "org.apache.lucene" % "lucene-test-framework" % "6.4.1" % "test",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
@@ -22,7 +26,7 @@ object Settings {
     "com.typesafe" % "config" % "1.3.0",
     "org.scalaz" %% "scalaz-core" % "latest.release",
     "org.scalaz" %% "scalaz-effect" % "latest.release",
-    "com.github.chengpohi" %% "elasticdsl" % "0.2.3-SNAPSHOT"
+    "com.github.chengpohi" %% "elasticdsl" % "0.2.3-SNAPSHOT" exclude("jline", "jline")
   )
 
 }

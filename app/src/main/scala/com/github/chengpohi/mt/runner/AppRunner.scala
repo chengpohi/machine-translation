@@ -1,7 +1,6 @@
-package com.github.chengpohi.mt
+package com.github.chengpohi.mt.runner
 
 import com.github.chengpohi.mt.config.MTConfig
-import com.github.chengpohi.registry.ELKCommandRegistry
 
 import scala.io.StdIn
 
@@ -10,7 +9,6 @@ import scala.io.StdIn
   */
 object AppRunner {
   def main(args: Array[String]): Unit = {
-    ELKCommandRegistry.client
     BootStrap()
     println(s"Started")
     StdIn.readLine()

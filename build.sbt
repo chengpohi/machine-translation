@@ -26,5 +26,5 @@ lazy val analyzer = project
 lazy val app = project
   .in(file("app"))
   .settings(commonSettings: _*)
-  .settings(libraryDependencies ++= commonDependencies)
+  .settings(libraryDependencies ++= commonDependencies ++ appDependencies)
   .dependsOn(analyzer)

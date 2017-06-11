@@ -1,4 +1,4 @@
-package com.github.chengpohi.mt
+package com.github.chengpohi.mt.runner
 
 object WordsInOrder {
 
@@ -9,7 +9,7 @@ object WordsInOrder {
       analyze text "have programming a seen never I language better" tokenizer "ngram"
     }.toJson
     DSL {
-      bulk index "test" / "corpus" fields List(
+      bulk index "test" / "corpus" doc List(
         List(("text", "I have never seen a better programming language"))
       )
     }
