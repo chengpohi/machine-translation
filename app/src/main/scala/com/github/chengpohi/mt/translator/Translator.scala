@@ -63,7 +63,7 @@ class WordIndexer(implicit dsl: ElasticDSL) {
   import dsl._
 
   def save(word: Word)(source: String): Future[IndexResponse] =
-    need {
+    DSL {
       index into "word" / source doc word id word.id
     }
 }
