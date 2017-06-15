@@ -2,14 +2,17 @@ package com.github.chengpohi.mt.runner
 
 import com.github.chengpohi.mt.translator.Translator
 import org.jline.reader.impl.DefaultHighlighter
-import org.jline.reader.{EndOfFileException, LineReaderBuilder, UserInterruptException}
+import org.jline.reader.{
+  EndOfFileException,
+  LineReaderBuilder,
+  UserInterruptException
+}
 import org.jline.terminal.TerminalBuilder
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 object TranslatorRepl {
-  private val translator = Translator.apply
   private val terminal = TerminalBuilder
     .builder()
     .system(true)
@@ -21,6 +24,16 @@ object TranslatorRepl {
     .build()
 
   def main(args: Array[String]): Unit = {
+    implicit val dsl =  com.github.chengpohi.registry.ELKDSLContext.dsl
+    import dsl._
+    val translator = Translator.apply
+
+    val health = DSL {
+      cluster health
+    }.toJson
+
+    println(health)
+
     while (true) {
       try {
         val line = reader.readLine("translator>")
@@ -28,9 +41,12 @@ object TranslatorRepl {
         line.trim.isEmpty match {
           case true =>
           case false =>
-            val result = translator.translate(line)
-            val t = Await.result(result, Duration.Inf)
-            t.foreach(println)
+            val result = translator.translate(line, "en")
+            val r = Await.result(result, Duration.Inf)
+            r match {
+              case h #:: l => println(h)
+              case _ => println("not found")
+            }
         }
       } catch {
         case e: UserInterruptException => System.exit(0)

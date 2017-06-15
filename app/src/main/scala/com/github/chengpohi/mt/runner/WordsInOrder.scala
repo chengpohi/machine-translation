@@ -2,7 +2,7 @@ package com.github.chengpohi.mt.runner
 
 object WordsInOrder {
 
-  import com.github.chengpohi.registry.ELKCommandRegistry.elasticDSL._
+  import com.github.chengpohi.registry.ELKDSLContext.dsl._
 
   def main(args: Array[String]): Unit = {
     val res = DSL {
