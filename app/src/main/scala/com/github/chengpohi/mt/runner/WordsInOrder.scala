@@ -1,8 +1,10 @@
 package com.github.chengpohi.mt.runner
 
-object WordsInOrder {
+import com.github.chengpohi.connector.ELKDSLConfig
+import com.github.chengpohi.registry.ELKDSLContext
 
-  import com.github.chengpohi.registry.ELKDSLContext.dsl._
+object WordsInOrder extends ELKDSLConfig with ELKDSLContext {
+  import dsl._
 
   def main(args: Array[String]): Unit = {
     val res = DSL {

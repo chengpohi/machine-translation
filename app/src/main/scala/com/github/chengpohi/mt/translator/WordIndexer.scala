@@ -1,6 +1,8 @@
 package com.github.chengpohi.mt.translator
 
 import com.github.chengpohi.api.ElasticDSL
+import com.github.chengpohi.connector.ELKDSLConfig
+import com.github.chengpohi.registry.ELKDSLContext
 import org.elasticsearch.action.index.IndexResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -89,9 +91,8 @@ class WordIndexer(implicit dsl: ElasticDSL) {
   }
 }
 
-object WordIndexer {
+object WordIndexer extends ELKDSLConfig with ELKDSLContext {
   def main(args: Array[String]): Unit = {
-    implicit val dsl = com.github.chengpohi.registry.ELKDSLContext.dsl
     import dsl._
 
     val path = "train_data/en_cn.xml"
@@ -102,9 +103,11 @@ object WordIndexer {
       .extract(Source.fromFile(path))
       .map(w => indexer.save(w)("en"))
 
-    val sequence = Future.sequence(res).map(_.flatten.foreach(s => {
-      println(s.toJson)
-    }))
+    val sequence = Future
+      .sequence(res)
+      .map(_.flatten.foreach(s => {
+        println(s.toJson)
+      }))
     sequence.onComplete {
       case Success(s) => println("Finish Extracting ...")
       case Failure(f) => f.printStackTrace()

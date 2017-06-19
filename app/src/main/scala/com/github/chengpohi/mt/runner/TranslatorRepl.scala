@@ -1,18 +1,16 @@
 package com.github.chengpohi.mt.runner
 
+import com.github.chengpohi.connector.ELKDSLConfig
 import com.github.chengpohi.mt.translator.Translator
+import com.github.chengpohi.registry.ELKDSLContext
 import org.jline.reader.impl.DefaultHighlighter
-import org.jline.reader.{
-  EndOfFileException,
-  LineReaderBuilder,
-  UserInterruptException
-}
+import org.jline.reader.{EndOfFileException, LineReaderBuilder, UserInterruptException}
 import org.jline.terminal.TerminalBuilder
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-object TranslatorRepl {
+object TranslatorRepl extends ELKDSLConfig with ELKDSLContext {
   private val terminal = TerminalBuilder
     .builder()
     .system(true)
@@ -24,7 +22,6 @@ object TranslatorRepl {
     .build()
 
   def main(args: Array[String]): Unit = {
-    implicit val dsl =  com.github.chengpohi.registry.ELKDSLContext.dsl
     import dsl._
     val translator = Translator.apply
 
