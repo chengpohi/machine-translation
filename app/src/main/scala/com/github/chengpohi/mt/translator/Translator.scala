@@ -18,12 +18,18 @@ class Translator(implicit dsl: ElasticDSL) {
         s.flatMap(i => {
           i.target.flatMap {
             case (t, ls) =>
-              ls.map(l => {
+              val res = ls.map(l => {
                 val term = DSL {
                   search in "word" / t where id equal l
                 }.as[Term]
-                Word(i.word, i.ps, i.ex, Map(t -> term.head))
+                term.map {
+                  case a #:: b =>
+                    Word(i.word, i.ps, i.ex, Map(t -> a))
+                  case _ =>
+                    Word(i.word, i.ps, i.ex, Map())
+                }
               })
+              Future.sequence(res)
           }
         }))
   }
