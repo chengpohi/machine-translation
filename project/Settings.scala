@@ -6,6 +6,7 @@ object Settings {
   lazy val commonSettings = Seq(
     organization := "com.github.chengpohi",
     version := "0.0.1-SNAPSHOT",
+    name := "nlp-tools",
     scalaVersion := "2.12.2",
     resolvers += Resolver.mavenLocal,
     ivyScala := ivyScala.value map {
