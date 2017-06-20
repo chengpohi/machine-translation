@@ -23,3 +23,5 @@ local/
 train_data/*
 .DS_Store
 
+mt-data
+mt-data/*
