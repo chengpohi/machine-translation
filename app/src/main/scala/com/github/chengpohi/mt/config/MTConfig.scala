@@ -2,7 +2,9 @@ package com.github.chengpohi.mt.config
 
 import java.io.File
 
-import com.typesafe.config.ConfigFactory
+import com.github.chengpohi.connector.ELKDSLConfig
+import com.github.chengpohi.registry.ELKDSLContext
+import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.collection.JavaConverters._
 
@@ -22,3 +24,10 @@ object MTConfig {
       .toMap
   }
 }
+
+trait MTDSLConfig extends ELKDSLConfig {
+  override val config: Config =
+    ConfigFactory.load("mt.conf").getConfig("elasticdsl")
+}
+
+trait MTDSLContext extends MTDSLConfig with ELKDSLContext

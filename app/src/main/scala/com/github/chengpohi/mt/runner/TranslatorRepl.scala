@@ -1,8 +1,7 @@
 package com.github.chengpohi.mt.runner
 
-import com.github.chengpohi.connector.ELKDSLConfig
+import com.github.chengpohi.mt.config.MTDSLContext
 import com.github.chengpohi.mt.translator.Translator
-import com.github.chengpohi.registry.ELKDSLContext
 import org.jline.reader.impl.DefaultHighlighter
 import org.jline.reader.{EndOfFileException, LineReaderBuilder, UserInterruptException}
 import org.jline.terminal.TerminalBuilder
@@ -10,7 +9,7 @@ import org.jline.terminal.TerminalBuilder
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-object TranslatorRepl extends ELKDSLConfig with ELKDSLContext {
+object TranslatorRepl extends MTDSLContext {
   private val terminal = TerminalBuilder
     .builder()
     .system(true)
