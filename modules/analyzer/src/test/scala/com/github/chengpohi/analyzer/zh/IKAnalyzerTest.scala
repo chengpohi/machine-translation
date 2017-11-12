@@ -2,7 +2,7 @@ package com.github.chengpohi.analyzer.zh
 
 import com.github.chengpohi.analyzer.MTTest
 import com.github.chengpohi.utils.TokenStreamInstances._
-import org.wltea.analyzer.cfg.Configuration
+/*import org.wltea.analyzer.cfg.Configuration
 import org.wltea.analyzer.lucene.IKTokenizer
 import org.apache.lucene.analysis.BaseTokenStreamTestCase._
 
@@ -19,4 +19,4 @@ class IKAnalyzerTest extends MTTest {
 
     //str.map(new MTEnAnalyzer).foreach(println)
   }
-}
+}*/
