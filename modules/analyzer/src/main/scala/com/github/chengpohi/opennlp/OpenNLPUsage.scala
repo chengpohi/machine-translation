@@ -1,23 +1,33 @@
 package com.github.chengpohi.opennlp
 
-import java.io.{FileInputStream, InputStream}
+import java.io._
+import java.nio.charset.StandardCharsets
 
 import opennlp.tools.chunker.{ChunkerME, ChunkerModel}
+import opennlp.tools.dictionary.Dictionary
+import opennlp.tools.langdetect._
+import opennlp.tools.ml.perceptron.PerceptronTrainer
 import opennlp.tools.namefind.{NameFinderME, TokenNameFinderModel}
 import opennlp.tools.parser.{Parse, Parser, ParserFactory, ParserModel}
 import opennlp.tools.postag.{POSModel, POSSample, POSTaggerME}
-import opennlp.tools.sentdetect.{SentenceDetectorME, SentenceModel}
+import opennlp.tools.sentdetect.{SentenceDetectorFactory, SentenceDetectorME, SentenceModel, SentenceSampleStream}
 import opennlp.tools.tokenize.{SimpleTokenizer, TokenizerME, TokenizerModel, WhitespaceTokenizer}
+import opennlp.tools.util.model.ModelUtil
+import opennlp.tools.util.{MarkableFileInputStreamFactory, PlainTextByLineStream, TrainingParameters}
 
-import scalaz.Scalaz._
+import scalaz._
+import Scalaz._
+
 
 object OpenNLPUsage extends App {
+  training
   tokenizer
   sentence
   nameentity
   speech
   parsing
   chunking
+  language
 }
 
 object tokenizer {
@@ -37,7 +47,9 @@ object tokenizer {
 }
 
 object sentence {
-  "sentence detector".println
+  val ANSI_RED = "\u001B[31m"
+  val ANSI_RESET = "\u001B[0m"
+  s"${ANSI_RED}sentence detector$ANSI_RESET".println
   val inputStream: InputStream = new FileInputStream("./models/opennlp/en-sent.bin")
 
   val model = new SentenceModel(inputStream)
@@ -104,8 +116,60 @@ object chunking {
 
   chunkerME.chunk(tokens, tags).foreach(println)
   chunkerME.chunkAsSpans(tokens, tags).foreach(println)
+}
 
+object training {
+  trainLanguageModels
+  trainSentenceDetector
 
+  def trainSentenceDetector = {
+    "traning sentence detector".println
 
+    val inputStreamFactory = new MarkableFileInputStreamFactory(new File("./models/opennlp/Sentences.txt"))
+    val lineStream = new PlainTextByLineStream(inputStreamFactory, StandardCharsets.UTF_8)
 
+    val sampleStream = new SentenceSampleStream(lineStream)
+
+    val abb = new FileInputStream("./models/opennlp/abb.xml")
+    val dictionary = new Dictionary(abb)
+    val eos = Array('.', '?')
+
+    val factory = new SentenceDetectorFactory(
+      "en", false, dictionary, null)
+
+    val model = SentenceDetectorME.train("en", sampleStream, factory, TrainingParameters.defaultParams())
+    val modelOut = new BufferedOutputStream(new FileOutputStream("./models/opennlp/en-sent.bin"))
+
+    model.serialize(modelOut)
+  }
+
+  def trainLanguageModels = {
+    "traning language models".println
+    val inputStreamFactory = new MarkableFileInputStreamFactory(new File("./models/opennlp/DoccatSample.txt"))
+
+    val lineStream =
+      new PlainTextByLineStream(inputStreamFactory, StandardCharsets.UTF_8)
+    val sampleStream = new LanguageDetectorSampleStream(lineStream)
+
+    val params = ModelUtil.createDefaultTrainingParameters()
+    params.put(TrainingParameters.ALGORITHM_PARAM,
+      PerceptronTrainer.PERCEPTRON_VALUE)
+    params.put(TrainingParameters.CUTOFF_PARAM, 0)
+
+    val factory = new LanguageDetectorFactory()
+
+    val model = LanguageDetectorME.train(sampleStream, params, factory)
+    model.serialize(new File("./models/opennlp/langdetect.bin"))
+  }
+
+}
+
+object language {
+  "language detector".println
+  val inputStream: InputStream = new FileInputStream("./models/opennlp/langdetect.bin")
+  val model = new LanguageDetectorModel(inputStream)
+
+  val myCategorizer = new LanguageDetectorME(model)
+  val language: Language = myCategorizer.predictLanguage("你好")
+  println(language)
 }
