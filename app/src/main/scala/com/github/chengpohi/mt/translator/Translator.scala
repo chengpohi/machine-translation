@@ -4,7 +4,6 @@ import com.github.chengpohi.api.ElasticDSL
 
 import scala.concurrent.Future
 
-
 class Translator(implicit dsl: ElasticDSL) {
 
   import scala.concurrent.ExecutionContext.Implicits.global

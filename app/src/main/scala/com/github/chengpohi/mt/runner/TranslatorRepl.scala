@@ -3,7 +3,11 @@ package com.github.chengpohi.mt.runner
 import com.github.chengpohi.mt.config.MTDSLContext
 import com.github.chengpohi.mt.translator.Translator
 import org.jline.reader.impl.DefaultHighlighter
-import org.jline.reader.{EndOfFileException, LineReaderBuilder, UserInterruptException}
+import org.jline.reader.{
+  EndOfFileException,
+  LineReaderBuilder,
+  UserInterruptException
+}
 import org.jline.terminal.TerminalBuilder
 
 import scala.concurrent.Await

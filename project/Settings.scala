@@ -28,7 +28,7 @@ object Settings {
     "org.apache.opennlp" % "opennlp-tools" % "1.8.3",
     "org.scalaz" %% "scalaz-core" % "latest.release",
     "org.scalaz" %% "scalaz-effect" % "latest.release",
-    "com.github.chengpohi" %% "elasticdsl" % "0.2.3-SNAPSHOT" exclude("jline", "jline")
+    "com.github.chengpohi" %% "elasticdsl" % "0.2.3-SNAPSHOT" exclude ("jline", "jline")
   )
 
 }

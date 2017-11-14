@@ -6,10 +6,10 @@ import com.github.chengpohi.algorithm.Sentence
 import com.github.chengpohi.analyzer.en.{MTEnTokenizer, NgramCorpus}
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 import org.apache.lucene.analysis.{
-Analyzer,
-LowerCaseFilter,
-TokenStream,
-Tokenizer
+  Analyzer,
+  LowerCaseFilter,
+  TokenStream,
+  Tokenizer
 }
 
 import scala.collection.mutable.ArrayBuffer
@@ -70,6 +70,7 @@ object TokenStreamInstances {
   )
 
   implicit object tokenStreamInstance extends Show[TokenStream] {
-    override def shows(t: TokenStream): String = t.toList.mkString(System.lineSeparator())
+    override def shows(t: TokenStream): String =
+      t.toList.mkString(System.lineSeparator())
   }
 }

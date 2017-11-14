@@ -38,10 +38,10 @@ class MTEnAnalyzerTest extends MTTest {
     result.foreach(_.println)
   }
 
-
   it should "generate tokens from file" in {
     val result = IO {
-      val source = scala.io.Source.fromInputStream(this.getClass.getResourceAsStream("/input.txt"))
+      val source = scala.io.Source.fromInputStream(
+        this.getClass.getResourceAsStream("/input.txt"))
       source.getLines().toStream
     }.map(_.map(l => {
       some(l) >>= (mtEnTokenizer >=> lowerCaseFilter)

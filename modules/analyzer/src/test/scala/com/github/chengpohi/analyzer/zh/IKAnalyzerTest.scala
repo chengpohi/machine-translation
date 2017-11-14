@@ -7,8 +7,8 @@ import org.wltea.analyzer.lucene.IKTokenizer
 import org.apache.lucene.analysis.BaseTokenStreamTestCase._
 
 /**
-  * Created by chengpohi on 21/02/2017.
-  */
+ * Created by chengpohi on 21/02/2017.
+ */
 class IKAnalyzerTest extends MTTest {
   implicit val tokenizer = new IKTokenizer(new Configuration())
   it should "generate tokens by ik analyzer" in {

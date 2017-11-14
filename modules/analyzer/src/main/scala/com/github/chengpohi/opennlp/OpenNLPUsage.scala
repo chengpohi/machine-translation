@@ -10,14 +10,25 @@ import opennlp.tools.ml.perceptron.PerceptronTrainer
 import opennlp.tools.namefind.{NameFinderME, TokenNameFinderModel}
 import opennlp.tools.parser.{Parse, Parser, ParserFactory, ParserModel}
 import opennlp.tools.postag.{POSModel, POSSample, POSTaggerME}
-import opennlp.tools.sentdetect.{SentenceDetectorFactory, SentenceDetectorME, SentenceModel, SentenceSampleStream}
-import opennlp.tools.tokenize.{SimpleTokenizer, TokenizerME, TokenizerModel, WhitespaceTokenizer}
+import opennlp.tools.sentdetect.{
+  SentenceDetectorFactory,
+  SentenceDetectorME,
+  SentenceModel,
+  SentenceSampleStream
+}
+import opennlp.tools.tokenize.{
+  SimpleTokenizer,
+  TokenizerME,
+  TokenizerModel,
+  WhitespaceTokenizer
+}
 import opennlp.tools.util.model.ModelUtil
-import opennlp.tools.util.{MarkableFileInputStreamFactory, PlainTextByLineStream, TrainingParameters}
-
-import scalaz._
-import Scalaz._
-
+import opennlp.tools.util.{
+  MarkableFileInputStreamFactory,
+  PlainTextByLineStream,
+  TrainingParameters
+}
+import com.github.chengpohi.utils.ColorString._
 
 object OpenNLPUsage extends App {
   training
@@ -31,50 +42,54 @@ object OpenNLPUsage extends App {
 }
 
 object tokenizer {
-  "simple tokenizer".println
+  "simple tokenizer".red
   val simpleTokenizer = SimpleTokenizer.INSTANCE
   simpleTokenizer.tokenize("hello123 world").foreach(println)
 
-  "whitespace tokenizer".println
+  "whitespace tokenizer".red
   val whitespaceTokenizer = WhitespaceTokenizer.INSTANCE
   whitespaceTokenizer.tokenize("foo123 bar").foreach(println)
 
-  "Tokenizer Model".println
-  val inputStream: InputStream = new FileInputStream("./models/opennlp/en-token.bin")
+  "Tokenizer Model".red
+  val inputStream: InputStream = new FileInputStream(
+    "./models/opennlp/en-token.bin")
   val tokenizerModel = new TokenizerModel(inputStream)
   val tokenizerME = new TokenizerME(tokenizerModel)
   tokenizerME.tokenize("it was a beautiful place").foreach(println)
 }
 
 object sentence {
-  val ANSI_RED = "\u001B[31m"
-  val ANSI_RESET = "\u001B[0m"
-  s"${ANSI_RED}sentence detector$ANSI_RESET".println
-  val inputStream: InputStream = new FileInputStream("./models/opennlp/en-sent.bin")
+
+  "sentence detector".red
+  val inputStream: InputStream = new FileInputStream(
+    "./models/opennlp/en-sent.bin")
 
   val model = new SentenceModel(inputStream)
   val detector = new SentenceDetectorME(model)
-  val sentence = "sentence detect, it's foo bar. How are you ? Do you want to have a drink?"
+  val sentence =
+    "sentence detect, it's foo bar. How are you ? Do you want to have a drink?"
   detector.sentDetect(sentence).foreach(println)
 
-  "sentence probabilities".println
+  "sentence probabilities".red
   detector.getSentenceProbabilities.foreach(println)
 
-  "sentence pos detect".println
+  "sentence pos detect".red
   detector.sentPosDetect(sentence).foreach(println)
 }
 
 object nameentity {
-  "Name Entity Recognition".println
-  val inputStream: InputStream = new FileInputStream("./models/opennlp/en-ner-person.bin")
+  "Name Entity Recognition".red
+  val inputStream: InputStream = new FileInputStream(
+    "./models/opennlp/en-ner-person.bin")
   val model = new TokenNameFinderModel(inputStream)
   val nameFinder = new NameFinderME(model)
   nameFinder.find(Array("Jack", "hello", "world", "Mike")).foreach(println)
 }
 
 object speech {
-  "Tag of Speech".println
-  val inputStream: InputStream = new FileInputStream("./models/opennlp/en-pos-maxent.bin")
+  "Tag of Speech".red
+  val inputStream: InputStream = new FileInputStream(
+    "./models/opennlp/en-pos-maxent.bin")
   val model = new POSModel(inputStream)
   val tagger = new POSTaggerME(model)
 
@@ -88,8 +103,9 @@ object speech {
 }
 
 object parsing {
-  "Parse Sentence".println
-  val inputStream = new FileInputStream("./models/opennlp/en-parser-chunking.bin")
+  "Parse Sentence".red
+  val inputStream = new FileInputStream(
+    "./models/opennlp/en-parser-chunking.bin")
   val model = new ParserModel(inputStream)
   val parser: Parser = ParserFactory.create(model)
 
@@ -101,17 +117,19 @@ object parsing {
 }
 
 object chunking {
-  "Chunking Sentence".println
+  "Chunking Sentence".red
   val sentence = "we need to chunk sentences"
   val tokenizer: WhitespaceTokenizer = WhitespaceTokenizer.INSTANCE
   val tokens: Array[String] = tokenizer.tokenize(sentence)
 
-  val inputStream: InputStream = new FileInputStream("./models/opennlp/en-pos-maxent.bin")
+  val inputStream: InputStream = new FileInputStream(
+    "./models/opennlp/en-pos-maxent.bin")
   val model = new POSModel(inputStream)
   val tagger = new POSTaggerME(model)
   val tags: Array[String] = tagger.tag(tokens)
 
-  val chunkerModel = new ChunkerModel(new FileInputStream("./models/opennlp/en-chunker.bin"))
+  val chunkerModel = new ChunkerModel(
+    new FileInputStream("./models/opennlp/en-chunker.bin"))
   val chunkerME = new ChunkerME(chunkerModel)
 
   chunkerME.chunk(tokens, tags).foreach(println)
@@ -123,10 +141,12 @@ object training {
   trainSentenceDetector
 
   def trainSentenceDetector = {
-    "traning sentence detector".println
+    "traning sentence detector".red
 
-    val inputStreamFactory = new MarkableFileInputStreamFactory(new File("./models/opennlp/Sentences.txt"))
-    val lineStream = new PlainTextByLineStream(inputStreamFactory, StandardCharsets.UTF_8)
+    val inputStreamFactory = new MarkableFileInputStreamFactory(
+      new File("./models/opennlp/Sentences.txt"))
+    val lineStream =
+      new PlainTextByLineStream(inputStreamFactory, StandardCharsets.UTF_8)
 
     val sampleStream = new SentenceSampleStream(lineStream)
 
@@ -134,18 +154,22 @@ object training {
     val dictionary = new Dictionary(abb)
     val eos = Array('.', '?')
 
-    val factory = new SentenceDetectorFactory(
-      "en", false, dictionary, null)
+    val factory = new SentenceDetectorFactory("en", false, dictionary, null)
 
-    val model = SentenceDetectorME.train("en", sampleStream, factory, TrainingParameters.defaultParams())
-    val modelOut = new BufferedOutputStream(new FileOutputStream("./models/opennlp/en-sent.bin"))
+    val model = SentenceDetectorME.train("en",
+                                         sampleStream,
+                                         factory,
+                                         TrainingParameters.defaultParams())
+    val modelOut = new BufferedOutputStream(
+      new FileOutputStream("./models/opennlp/en-sent.bin"))
 
     model.serialize(modelOut)
   }
 
   def trainLanguageModels = {
-    "traning language models".println
-    val inputStreamFactory = new MarkableFileInputStreamFactory(new File("./models/opennlp/DoccatSample.txt"))
+    "traning language models".red
+    val inputStreamFactory = new MarkableFileInputStreamFactory(
+      new File("./models/opennlp/DoccatSample.txt"))
 
     val lineStream =
       new PlainTextByLineStream(inputStreamFactory, StandardCharsets.UTF_8)
@@ -153,7 +177,7 @@ object training {
 
     val params = ModelUtil.createDefaultTrainingParameters()
     params.put(TrainingParameters.ALGORITHM_PARAM,
-      PerceptronTrainer.PERCEPTRON_VALUE)
+               PerceptronTrainer.PERCEPTRON_VALUE)
     params.put(TrainingParameters.CUTOFF_PARAM, 0)
 
     val factory = new LanguageDetectorFactory()
@@ -165,8 +189,9 @@ object training {
 }
 
 object language {
-  "language detector".println
-  val inputStream: InputStream = new FileInputStream("./models/opennlp/langdetect.bin")
+  "language detector".red
+  val inputStream: InputStream = new FileInputStream(
+    "./models/opennlp/langdetect.bin")
   val model = new LanguageDetectorModel(inputStream)
 
   val myCategorizer = new LanguageDetectorME(model)
