@@ -1,6 +1,6 @@
-package com.github.chengpohi.mt.runner
+package com.github.chengpohi.nlp.runner
 
-import com.github.chengpohi.mt.config.MTConfig
+import com.github.chengpohi.nlp.config.MTConfig
 
 import scala.io.StdIn
 

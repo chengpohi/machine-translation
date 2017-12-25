@@ -1,4 +1,4 @@
-package com.github.chengpohi.mt.translator
+package com.github.chengpohi.nlp.translator
 
 import com.github.chengpohi.api.ElasticDSL
 

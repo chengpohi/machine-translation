@@ -1,7 +1,7 @@
-package com.github.chengpohi.mt.runner
+package com.github.chengpohi.nlp.runner
 
-import com.github.chengpohi.mt.config.MTDSLContext
-import com.github.chengpohi.mt.translator.Translator
+import com.github.chengpohi.nlp.config.MTDSLContext
+import com.github.chengpohi.nlp.translator.Translator
 import org.jline.reader.impl.DefaultHighlighter
 import org.jline.reader.{
   EndOfFileException,

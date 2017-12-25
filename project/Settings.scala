@@ -26,8 +26,10 @@ object Settings {
     "org.apache.logging.log4j" % "log4j-core" % "2.7",
     "com.typesafe" % "config" % "1.3.0",
     "org.apache.opennlp" % "opennlp-tools" % "1.8.3",
-    "org.scalaz" %% "scalaz-core" % "latest.release",
-    "org.scalaz" %% "scalaz-effect" % "latest.release",
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.8.0",
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.8.0" classifier "models-english",
+    "org.scalaz" %% "scalaz-core" % "7.3.0-M18",
+    "org.scalaz" %% "scalaz-effect" % "7.3.0-M18",
     "com.github.chengpohi" %% "elasticdsl" % "0.2.3-SNAPSHOT" exclude ("jline", "jline")
   )
 

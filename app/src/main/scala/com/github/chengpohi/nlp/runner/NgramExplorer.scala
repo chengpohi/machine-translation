@@ -1,4 +1,4 @@
-package com.github.chengpohi.mt.runner
+package com.github.chengpohi.nlp.runner
 
 import com.github.chengpohi.algorithm.GramTerm
 import com.github.chengpohi.analyzer.en.NgramCorpus

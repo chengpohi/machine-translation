@@ -3,32 +3,18 @@ package com.github.chengpohi.opennlp
 import java.io._
 import java.nio.charset.StandardCharsets
 
-import opennlp.tools.chunker.{ChunkerME, ChunkerModel}
+import com.github.chengpohi.utils.ColorString._
+import opennlp.tools.chunker.{ChunkSample, ChunkerME, ChunkerModel}
 import opennlp.tools.dictionary.Dictionary
 import opennlp.tools.langdetect._
 import opennlp.tools.ml.perceptron.PerceptronTrainer
 import opennlp.tools.namefind.{NameFinderME, TokenNameFinderModel}
 import opennlp.tools.parser.{Parse, Parser, ParserFactory, ParserModel}
 import opennlp.tools.postag.{POSModel, POSSample, POSTaggerME}
-import opennlp.tools.sentdetect.{
-  SentenceDetectorFactory,
-  SentenceDetectorME,
-  SentenceModel,
-  SentenceSampleStream
-}
-import opennlp.tools.tokenize.{
-  SimpleTokenizer,
-  TokenizerME,
-  TokenizerModel,
-  WhitespaceTokenizer
-}
+import opennlp.tools.sentdetect._
+import opennlp.tools.tokenize.{SimpleTokenizer, TokenizerME, TokenizerModel, WhitespaceTokenizer}
 import opennlp.tools.util.model.ModelUtil
-import opennlp.tools.util.{
-  MarkableFileInputStreamFactory,
-  PlainTextByLineStream,
-  TrainingParameters
-}
-import com.github.chengpohi.utils.ColorString._
+import opennlp.tools.util.{MarkableFileInputStreamFactory, PlainTextByLineStream, TrainingParameters}
 
 object OpenNLPUsage extends App {
   training
@@ -197,4 +183,23 @@ object language {
   val myCategorizer = new LanguageDetectorME(model)
   val language: Language = myCategorizer.predictLanguage("你好")
   println(language)
+}
+
+object evaluation {
+
+  import java.io.ByteArrayOutputStream
+
+  import opennlp.tools.cmdline.sentdetect.SentenceEvaluationErrorListener
+
+  val stream = new ByteArrayOutputStream
+  val listener = new SentenceEvaluationErrorListener(stream)
+
+  val inputStream: InputStream = new FileInputStream(
+    "./models/opennlp/en-sent.bin")
+
+  val model = new SentenceModel(inputStream)
+  val detector = new SentenceDetectorME(model)
+
+  val evaluator: SentenceDetectorEvaluator = new SentenceDetectorEvaluator(detector, listener)
+  //evaluator.evaluateSample(sample)
 }

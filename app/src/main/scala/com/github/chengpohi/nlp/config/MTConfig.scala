@@ -1,4 +1,4 @@
-package com.github.chengpohi.mt.config
+package com.github.chengpohi.nlp.config
 
 import java.io.File
 
